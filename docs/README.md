@@ -176,7 +176,7 @@ The database schema has been updated to include the following tables:
 ## Instructions
 
 1. **Setting Up the Database:**
-   - Use the provided Docker Compose files to set up the initial and final database containers.
+   - Used the provided Docker Compose files to set up the initial and final database containers.
    - To start with the initial setup:
      ```bash
      docker-compose -f docker-compose.initial.yml up --build -d
@@ -192,7 +192,7 @@ The database schema has been updated to include the following tables:
    - The `99_final_db_dump.sql` script applies the normalized schema.
 
 3. **Verification:**
-   - Verify the schema and data by connecting to the database and running the following queries:
+   - Verified the schema and data by connecting to the database and running the following queries:
      ```sql
      -- Check user table
      SELECT * FROM user;
@@ -214,7 +214,6 @@ The database schema has been successfully normalized, and data integrity has bee
 
 ---
 
-**Note:** Ensure that all SQL scripts and Dockerfiles are correctly included in the respective directories (`sql/` and root directory) for the setup and verification process.
 
 
 ## 2. React SPA
