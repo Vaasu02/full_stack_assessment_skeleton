@@ -130,6 +130,92 @@ docker-compose -f docker-compose.initial.yml up --build -d
 ### solution
 
 > explain briefly your solution for this problem here
+> # Step 1: Database Normalization
+
+## Objective
+This step involves normalizing the database schema from the initial setup to a more optimized design. The goal is to eliminate redundancy and improve data integrity by restructuring the tables.
+
+## New Schema Design
+The database schema has been updated to include the following tables:
+
+### **user**
+- `username` (VARCHAR(100), Primary Key)
+- `email` (VARCHAR(100))
+
+### **home**
+- `street_address` (VARCHAR(255), Primary Key)
+- `state` (VARCHAR(50))
+- `zip` (VARCHAR(10))
+- `sqft` (FLOAT)
+- `beds` (INT)
+- `baths` (INT)
+- `list_price` (FLOAT)
+
+### **user_home_relation**
+- `username` (VARCHAR(100), Foreign Key referencing `user(username)`)
+- `street_address` (VARCHAR(255), Foreign Key referencing `home(street_address)`)
+
+## Data Migration Process
+
+1. **Initial Setup:**
+   - The initial MySQL database was set up using `Dockerfile.initial_db` and `docker-compose.initial.yml`. This setup included the original `user_home` table.
+
+2. **Final Schema Setup:**
+   - A new Docker image was built using `Dockerfile.final_db` and deployed with `docker-compose.final.yml`. This setup includes the normalized schema with `user`, `home`, and `user_home_relation` tables.
+
+3. **Data Migration:**
+   - **Create New Tables:** Created `user`, `home`, and `user_home_relation` tables.
+   - **Data Insertion:**
+     - Extracted user data and inserted it into the `user` table.
+     - Extracted home data and inserted it into the `home` table.
+     - Established relationships between users and homes by inserting data into the `user_home_relation` table.
+
+4. **Verification:**
+   - Verified the new schema by querying the new tables to ensure data integrity and consistency.
+
+## Instructions
+
+1. **Setting Up the Database:**
+   - Use the provided Docker Compose files to set up the initial and final database containers.
+   - To start with the initial setup:
+     ```bash
+     docker-compose -f docker-compose.initial.yml up --build -d
+     ```
+   - To apply the final schema and data:
+     ```bash
+     docker-compose -f docker-compose.final.yml up --build -d
+     ```
+
+2. **Running Migrations:**
+   - The SQL scripts are located in the `sql` directory.
+   - The `00_init_db_dump.sql` script initializes the database.
+   - The `99_final_db_dump.sql` script applies the normalized schema.
+
+3. **Verification:**
+   - Verify the schema and data by connecting to the database and running the following queries:
+     ```sql
+     -- Check user table
+     SELECT * FROM user;
+
+     -- Check home table
+     SELECT * FROM home;
+
+     -- Check user_home_relation table
+     SELECT * FROM user_home_relation;
+     ```
+
+## Assumptions and Decisions
+- Assumed that the data in `user_home` table is clean and consistent.
+- Designed the schema to handle many-to-many relationships between users and homes efficiently.
+- Used foreign keys to ensure referential integrity between `user` and `home` tables.
+
+## Conclusion
+The database schema has been successfully normalized, and data integrity has been maintained. The new schema is more efficient and adheres to relational database principles.
+
+---
+
+**Note:** Ensure that all SQL scripts and Dockerfiles are correctly included in the respective directories (`sql/` and root directory) for the setup and verification process.
+
 
 ## 2. React SPA
 
