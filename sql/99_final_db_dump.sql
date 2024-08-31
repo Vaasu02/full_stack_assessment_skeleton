@@ -1,11 +1,11 @@
--- Step 1: Create the new 'user' table
+-- Step 1: Created the new 'user' table
 CREATE TABLE user (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(100) UNIQUE NOT NULL,
   email VARCHAR(100) UNIQUE NOT NULL
 );
 
--- Step 2: Create the new 'home' table
+-- Step 2: Created the new 'home' table
 CREATE TABLE home (
   id INT AUTO_INCREMENT PRIMARY KEY,
   street_address VARCHAR(255) UNIQUE NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE home (
   list_price FLOAT
 );
 
--- Step 3: Create the 'user_home_relation' table
+-- Step 3: Created the 'user_home_relation' table
 CREATE TABLE user_home_relation (
   user_id INT,
   home_id INT,
@@ -25,11 +25,11 @@ CREATE TABLE user_home_relation (
   FOREIGN KEY (home_id) REFERENCES home(id)
 );
 
--- Step 4: Insert distinct users into 'user' table
+-- Step 4: Inserted distinct users into 'user' table
 INSERT INTO user (username, email)
 SELECT DISTINCT username, email FROM user_home;
 
--- Step 5: Insert distinct homes into 'home' table
+-- Step 5: Inserted distinct homes into 'home' table
 INSERT INTO home (street_address, state, zip, sqft, beds, baths, list_price)
 SELECT DISTINCT street_address, state, zip, sqft, beds, baths, list_price FROM user_home;
 
