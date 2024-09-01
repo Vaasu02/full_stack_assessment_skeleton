@@ -368,8 +368,6 @@ The database schema has been successfully normalized, and data integrity has bee
 
 > explain briefly your solution for this problem here
 
-### Step 3: Backend API Development on Node
-
 #### Objective
 
 This step involves creating REST APIs that interact with the database to provide necessary functionality for the web application. The goal was to implement endpoints for fetching users, homes, and updating home-user relationships.
