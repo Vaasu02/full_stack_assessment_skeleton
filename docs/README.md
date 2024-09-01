@@ -130,7 +130,6 @@ docker-compose -f docker-compose.initial.yml up --build -d
 ### solution
 
 > explain briefly your solution for this problem here
-> # Step 1: Database Normalization
 
 ## Objective
 This step involves normalizing the database schema from the initial setup to a more optimized design. The goal is to eliminate redundancy and improve data integrity by restructuring the tables.
@@ -307,6 +306,127 @@ The database schema has been successfully normalized, and data integrity has bee
 
 > explain briefly your solution for this problem here
 
+## Objective
+
+This step involves building the frontend of the web application to interact with the backend APIs and provide a user-friendly interface. The goal was to handle data fetching, and provide a responsive user experience.
+
+### Technologies Used
+
+- **Vite**: A fast development environment for modern JavaScript frameworks.
+- **Tailwind CSS**: For utility-first styling and responsive design.
+- **Redux Toolkit**: For state management.
+- **RTK Query**: For data fetching.
+- **react-loading-skeleton**: For displaying skeleton loaders.
+
+### Components and Features
+
+#### **App Component**
+
+- **Location:** `app.jsx`
+- **Description:** The root component of the application that sets up the routing using `react-router-dom`. It defines routes and renders the `HomesForUser` page.
+
+#### **HomesForUser Page**
+
+- **Location:** `pages/HomesForUser.jsx`
+- **Description:** Displays a list of homes associated with a selected user and provides pagination controls. Allows for editing home-user relationships through a modal.
+- **Features:**
+  - Fetches homes data based on the selected user.
+  - Displays homes using the `HomeCard` component.
+  - Provides pagination controls to navigate through pages of homes.
+  - Opens the `EditUserModal` for editing users associated with a home.
+
+#### **HomeCard Component**
+
+- **Location:** `components/HomeCard.jsx`
+- **Description:** Displays information about a single home and provides a button to edit users associated with that home.
+- **Features:**
+  - Shows details like street address, list price, state, zip, sqft, beds, and baths.
+  - Provides an "Edit User" button to trigger the editing modal.
+
+#### **EditUserModal Component**
+
+- **Location:** `components/EditUserModal.jsx`
+- **Description:** A modal for editing the list of users associated with a specific home.
+- **Features:**
+  - Displays a list of users with checkboxes to select or deselect users.
+  - Uses `RTK Query` to fetch users and update the home’s user list.
+  - Provides "Save" and "Cancel" buttons to either save changes or close the modal.
+
+#### **UserDropdown Component**
+
+- **Location:** `components/UserDropdown.jsx`
+- **Description:** A dropdown menu to select a user from the list of all users.
+- **Features:**
+  - Fetches and displays all users using `RTK Query`.
+  - Updates the selected user in the Redux store when a user is selected from the dropdown.
+
+### Redux Setup
+
+#### **Store Configuration**
+
+- **Location:** `app/store.js`
+- **Description:** Configures the Redux store with reducers and middleware from `RTK Query`.
+- **Features:**
+  - Combines reducers for `users` and `homes` slices.
+  - Adds middleware for `usersApi` and `homesApi` to handle data fetching.
+
+#### **Slices**
+
+- **User Slice**
+  - **Location:** `features/users/userSlice.js`
+  - **Description:** Manages the state of the selected user.
+  - **Reducers:** Includes `selectUser` to update the selected user.
+
+- **Homes Slice**
+  - **Location:** `features/homes/homeSlice.js`
+  - **Description:** Manages the state of homes.
+  - **Reducers:** Includes `setHomes` to update the homes list.
+
+### API Integration
+
+#### **RTK Query API Endpoints**
+
+- **Users API**
+  - **Location:** `features/users/userApi.js`
+  - **Endpoints:**
+    - `fetchAllUsers`: Fetches all users from `/user/find-all`.
+
+- **Homes API**
+  - **Location:** `features/homes/homeApi.js`
+  - **Endpoints:**
+    - `fetchHomesByUser`: Fetches homes by user from `/home/find-by-user`.
+    - `fetchUsersByHome`: Fetches users by home from `/user/find-by-home`.
+    - `updateHomeUsers`: Updates users for a home at `/home/update-users`.
+
+### Instructions
+
+1. **Starting the Frontend:**
+   - Run the following command to start the development server:
+     ```bash
+     npm run dev
+     ```
+
+2. **Building the Project:**
+   - For production build, use:
+     ```bash
+     npm run build
+     ```
+
+3. **Testing the Application:**
+   - Navigate to `http://localhost:5173` to view the application.
+
+### Assumptions and Decisions
+
+- Used Vite for its fast build and development features.
+- Chose Tailwind CSS for a utility-first approach to styling.
+- Used Redux Toolkit and RTK Query to efficiently manage state and handle data fetching.
+- Implemented `react-loading-skeleton` to provide a better user experience during data loading.
+
+### Conclusion
+
+The frontend of the application has been successfully implemented, providing a responsive and interactive user interface. The integration with backend APIs allows for seamless data management and interaction.
+
+
 ## 3. Backend API development on Node
 
 ### problem
@@ -367,6 +487,88 @@ The database schema has been successfully normalized, and data integrity has bee
 ### solution
 
 > explain briefly your solution for this problem here
+
+#### Objective
+
+This step involves creating REST APIs that interact with the database to provide necessary functionality for the web application. The goal was to implement endpoints for fetching users, homes, and updating home-user relationships.
+
+### API Endpoints
+
+#### **/user/find-all**
+
+- **Method:** `GET`
+- **Description:** Retrieves a list of all users from the database.
+- **Implementation:**
+  - The `findAllUsers` method in `userController.js` queries the `user` table using Prisma's `findMany` method.
+  - Responds with a JSON array of all users.
+
+#### **/home/find-by-user**
+
+- **Method:** `GET`
+- **Description:** Retrieves all homes related to a specific user.
+- **Parameters:** 
+  - `userId` (query parameter for user ID)
+  - `page` (optional for pagination)
+  - `pageSize` (optional for pagination)
+- **Implementation:**
+  - The `findHomesByUser` method in `homeController.js` uses Prisma's `findMany` method with a `where` clause to filter homes by user ID.
+  - Implements pagination by using `skip` and `take` parameters.
+  - Returns a JSON response with homes and pagination details.
+
+#### **/user/find-by-home**
+
+- **Method:** `GET`
+- **Description:** Retrieves all users related to a specific home.
+- **Parameters:**
+  - `homeId` (query parameter for home ID)
+- **Implementation:**
+  - The `findUsersByHome` method in `userController.js` uses Prisma's `findMany` method to filter users by home ID.
+  - Returns a JSON array of users associated with the home.
+
+#### **/home/update-users**
+
+- **Method:** `PUT`
+- **Description:** Updates the list of users associated with a specific home.
+- **Body:** JSON object containing `homeId` and an array of `userIds`
+- **Implementation:**
+  - The `updateHomeUsers` method in `homeController.js` first deletes existing relationships using `deleteMany` and then creates new relationships using `createMany`.
+  - Updates the `user_home_relation` table to reflect the changes.
+  - Returns the updated home with associated users.
+
+### Instructions
+
+1. **Starting the Server:**
+   - Run the following command to start the server:
+     ```bash
+     npm start
+     ```
+   - For development mode with auto-reloading:
+     ```bash
+     npm run dev
+     ```
+
+2. **Testing the Endpoints:**
+   - Use tools like Postman or cURL to test the APIs.
+   - Example cURL command to fetch all users:
+     ```bash
+     curl http://localhost:3000/user/find-all
+     ```
+   - Example cURL command to fetch homes by user:
+     ```bash
+     curl "http://localhost:3000/home/find-by-user?userId=1"
+     ```
+
+### Assumptions and Decisions
+
+- Used Express for the API framework due to its simplicity and wide usage in Node.js applications.
+- Prisma was chosen as the ORM for its ease of use and integration with MySQL.
+
+
+### Conclusion
+
+The backend APIs have been successfully implemented, providing essential endpoints to interact with the database. The solution adheres to REST principles and ensures efficient data retrieval and updates for the application.
+
+
 
 ## Submission Guidelines
 
