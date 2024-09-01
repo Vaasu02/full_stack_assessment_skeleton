@@ -368,6 +368,90 @@ The database schema has been successfully normalized, and data integrity has bee
 
 > explain briefly your solution for this problem here
 
+### Step 3: Backend API Development on Node
+
+#### Objective
+
+This step involves creating REST APIs that interact with the database to provide necessary functionality for the web application. The goal was to implement endpoints for fetching users, homes, and updating home-user relationships.
+
+### API Endpoints
+
+#### **/user/find-all**
+
+- **Method:** `GET`
+- **Description:** Retrieves a list of all users from the database.
+- **Implementation:**
+  - The `findAllUsers` method in `userController.js` queries the `user` table using Prisma's `findMany` method.
+  - Responds with a JSON array of all users.
+
+#### **/home/find-by-user**
+
+- **Method:** `GET`
+- **Description:** Retrieves all homes related to a specific user.
+- **Parameters:** 
+  - `userId` (query parameter for user ID)
+  - `page` (optional for pagination)
+  - `pageSize` (optional for pagination)
+- **Implementation:**
+  - The `findHomesByUser` method in `homeController.js` uses Prisma's `findMany` method with a `where` clause to filter homes by user ID.
+  - Implements pagination by using `skip` and `take` parameters.
+  - Returns a JSON response with homes and pagination details.
+
+#### **/user/find-by-home**
+
+- **Method:** `GET`
+- **Description:** Retrieves all users related to a specific home.
+- **Parameters:**
+  - `homeId` (query parameter for home ID)
+- **Implementation:**
+  - The `findUsersByHome` method in `userController.js` uses Prisma's `findMany` method to filter users by home ID.
+  - Returns a JSON array of users associated with the home.
+
+#### **/home/update-users**
+
+- **Method:** `PUT`
+- **Description:** Updates the list of users associated with a specific home.
+- **Body:** JSON object containing `homeId` and an array of `userIds`
+- **Implementation:**
+  - The `updateHomeUsers` method in `homeController.js` first deletes existing relationships using `deleteMany` and then creates new relationships using `createMany`.
+  - Updates the `user_home_relation` table to reflect the changes.
+  - Returns the updated home with associated users.
+
+### Instructions
+
+1. **Starting the Server:**
+   - Run the following command to start the server:
+     ```bash
+     npm start
+     ```
+   - For development mode with auto-reloading:
+     ```bash
+     npm run dev
+     ```
+
+2. **Testing the Endpoints:**
+   - Use tools like Postman or cURL to test the APIs.
+   - Example cURL command to fetch all users:
+     ```bash
+     curl http://localhost:3000/user/find-all
+     ```
+   - Example cURL command to fetch homes by user:
+     ```bash
+     curl "http://localhost:3000/home/find-by-user?userId=1"
+     ```
+
+### Assumptions and Decisions
+
+- Used Express for the API framework due to its simplicity and wide usage in Node.js applications.
+- Prisma was chosen as the ORM for its ease of use and integration with MySQL.
+
+
+### Conclusion
+
+The backend APIs have been successfully implemented, providing essential endpoints to interact with the database. The solution adheres to REST principles and ensures efficient data retrieval and updates for the application.
+
+
+
 ## Submission Guidelines
 
 - once you're done with [DB](#1-database), [frontend](#2-react-spa), [backend](#3-backend-api-development-on-node) it's time to submit your solution :smiley:
