@@ -306,6 +306,127 @@ The database schema has been successfully normalized, and data integrity has bee
 
 > explain briefly your solution for this problem here
 
+## Objective
+
+This step involves building the frontend of the web application to interact with the backend APIs and provide a user-friendly interface. The goal was to handle data fetching, and provide a responsive user experience.
+
+### Technologies Used
+
+- **Vite**: A fast development environment for modern JavaScript frameworks.
+- **Tailwind CSS**: For utility-first styling and responsive design.
+- **Redux Toolkit**: For state management.
+- **RTK Query**: For data fetching.
+- **react-loading-skeleton**: For displaying skeleton loaders.
+
+### Components and Features
+
+#### **App Component**
+
+- **Location:** `app.jsx`
+- **Description:** The root component of the application that sets up the routing using `react-router-dom`. It defines routes and renders the `HomesForUser` page.
+
+#### **HomesForUser Page**
+
+- **Location:** `pages/HomesForUser.jsx`
+- **Description:** Displays a list of homes associated with a selected user and provides pagination controls. Allows for editing home-user relationships through a modal.
+- **Features:**
+  - Fetches homes data based on the selected user.
+  - Displays homes using the `HomeCard` component.
+  - Provides pagination controls to navigate through pages of homes.
+  - Opens the `EditUserModal` for editing users associated with a home.
+
+#### **HomeCard Component**
+
+- **Location:** `components/HomeCard.jsx`
+- **Description:** Displays information about a single home and provides a button to edit users associated with that home.
+- **Features:**
+  - Shows details like street address, list price, state, zip, sqft, beds, and baths.
+  - Provides an "Edit User" button to trigger the editing modal.
+
+#### **EditUserModal Component**
+
+- **Location:** `components/EditUserModal.jsx`
+- **Description:** A modal for editing the list of users associated with a specific home.
+- **Features:**
+  - Displays a list of users with checkboxes to select or deselect users.
+  - Uses `RTK Query` to fetch users and update the home’s user list.
+  - Provides "Save" and "Cancel" buttons to either save changes or close the modal.
+
+#### **UserDropdown Component**
+
+- **Location:** `components/UserDropdown.jsx`
+- **Description:** A dropdown menu to select a user from the list of all users.
+- **Features:**
+  - Fetches and displays all users using `RTK Query`.
+  - Updates the selected user in the Redux store when a user is selected from the dropdown.
+
+### Redux Setup
+
+#### **Store Configuration**
+
+- **Location:** `app/store.js`
+- **Description:** Configures the Redux store with reducers and middleware from `RTK Query`.
+- **Features:**
+  - Combines reducers for `users` and `homes` slices.
+  - Adds middleware for `usersApi` and `homesApi` to handle data fetching.
+
+#### **Slices**
+
+- **User Slice**
+  - **Location:** `features/users/userSlice.js`
+  - **Description:** Manages the state of the selected user.
+  - **Reducers:** Includes `selectUser` to update the selected user.
+
+- **Homes Slice**
+  - **Location:** `features/homes/homeSlice.js`
+  - **Description:** Manages the state of homes.
+  - **Reducers:** Includes `setHomes` to update the homes list.
+
+### API Integration
+
+#### **RTK Query API Endpoints**
+
+- **Users API**
+  - **Location:** `features/users/userApi.js`
+  - **Endpoints:**
+    - `fetchAllUsers`: Fetches all users from `/user/find-all`.
+
+- **Homes API**
+  - **Location:** `features/homes/homeApi.js`
+  - **Endpoints:**
+    - `fetchHomesByUser`: Fetches homes by user from `/home/find-by-user`.
+    - `fetchUsersByHome`: Fetches users by home from `/user/find-by-home`.
+    - `updateHomeUsers`: Updates users for a home at `/home/update-users`.
+
+### Instructions
+
+1. **Starting the Frontend:**
+   - Run the following command to start the development server:
+     ```bash
+     npm run dev
+     ```
+
+2. **Building the Project:**
+   - For production build, use:
+     ```bash
+     npm run build
+     ```
+
+3. **Testing the Application:**
+   - Navigate to `http://localhost:5173` to view the application.
+
+### Assumptions and Decisions
+
+- Used Vite for its fast build and development features.
+- Chose Tailwind CSS for a utility-first approach to styling.
+- Used Redux Toolkit and RTK Query to efficiently manage state and handle data fetching.
+- Implemented `react-loading-skeleton` to provide a better user experience during data loading.
+
+### Conclusion
+
+The frontend of the application has been successfully implemented, providing a responsive and interactive user interface. The integration with backend APIs allows for seamless data management and interaction.
+
+
 ## 3. Backend API development on Node
 
 ### problem
