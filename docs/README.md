@@ -130,7 +130,6 @@ docker-compose -f docker-compose.initial.yml up --build -d
 ### solution
 
 > explain briefly your solution for this problem here
-> # Step 1: Database Normalization
 
 ## Objective
 This step involves normalizing the database schema from the initial setup to a more optimized design. The goal is to eliminate redundancy and improve data integrity by restructuring the tables.
