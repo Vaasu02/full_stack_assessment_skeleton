@@ -19,6 +19,7 @@ CREATE TABLE home (
 
 -- Step 3: Create the 'user_home_relation' table
 CREATE TABLE user_home_relation (
+  id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
   home_id INT,
   FOREIGN KEY (user_id) REFERENCES user(id),
